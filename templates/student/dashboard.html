@@ -1,0 +1,876 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>UniTrack — Кабинет студента</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+</head>
+
+
+<body class="dashboard-body" data-page="student">
+
+
+<div class="app-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+            <span>UniTrack</span>
+
+        </div>
+
+
+        <div class="sidebar-menu">
+
+            <div class="sidebar-title">
+                Главное
+            </div>
+
+
+            <a
+                href="#"
+                class="sidebar-link active"
+            >
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Главная</span>
+
+            </a>
+
+
+            <a
+                href="#lectures"
+                class="sidebar-link"
+            >
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>Лекции</span>
+
+            </a>
+
+
+            <a
+                href="#labs"
+                class="sidebar-link"
+            >
+
+                <i class="fa-solid fa-flask"></i>
+
+                <span>Лабораторные</span>
+
+            </a>
+
+
+            <div class="sidebar-title">
+                Аккаунт
+            </div>
+
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Профиль</span>
+
+            </a>
+
+
+            <a
+                href="/"
+                class="sidebar-link"
+                onclick="API.logout(); return false;"
+            >
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Выйти</span>
+
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-user">
+
+            <div class="user-mini">
+
+                <div class="avatar" id="userAvatar">
+                    —
+                </div>
+
+                <div class="user-mini-info">
+
+                    <strong id="userName">
+                        Загрузка...
+                    </strong>
+
+                    <small id="userGroup">
+                        &nbsp;
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <strong>
+                    Кабинет студента
+                </strong>
+
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button
+                    class="btn btn-light rounded-circle"
+                >
+                    <i class="fa-regular fa-bell"></i>
+                </button>
+
+                <span class="badge bg-primary" id="groupBadge">
+                    —
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-content">
+
+
+            <!-- TITLE -->
+
+            <div class="page-title">
+
+                <h1 id="greeting">
+                    Загрузка...
+                </h1>
+
+                <p>
+                    Здесь вы можете отслеживать свой учебный прогресс.
+                </p>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stat-grid">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Лабораторные
+                            </div>
+
+                            <div class="stat-value" id="statLabs">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-flask"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Лекции
+                            </div>
+
+                            <div class="stat-value" id="statLectures">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-book-open"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <div>
+
+                            <div class="stat-label">
+                                На проверке
+                            </div>
+
+                            <div class="stat-value" id="statPending">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Общий прогресс
+                            </div>
+
+                            <div class="stat-value" id="statProgress">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="content-card mb-4">
+
+                <div class="content-card-header">
+
+                    <h3>
+                        Ваш прогресс
+                    </h3>
+
+                    <strong id="progressPercent">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-custom">
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar"
+                        style="width: 0%"
+                    ></div>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between mt-3">
+
+                    <small class="text-muted" id="progressCompleted">
+                        &nbsp;
+                    </small>
+
+                    <small class="text-muted" id="progressRemaining">
+                        &nbsp;
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- LECTURES -->
+
+            <div
+                class="content-card mb-4"
+                id="lectures"
+            >
+
+                <div class="content-card-header">
+
+                    <h3>
+                        Последние лекции
+                    </h3>
+
+                    <a href="#lectures">
+                        Все лекции
+                    </a>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                Лекция
+                            </th>
+
+                            <th>
+                                Дата
+                            </th>
+
+                            <th>
+                                Статус
+                            </th>
+
+                            <th></th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody id="lecturesBody">
+
+                        <tr>
+
+                            <td colspan="4" class="text-center text-muted py-4">
+                                Загрузка...
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- LABS -->
+
+            <div
+                class="content-card"
+                id="labs"
+            >
+
+                <div class="content-card-header">
+
+                    <h3>
+                        Лабораторные работы
+                    </h3>
+
+                    <span class="badge bg-light text-dark" id="labsCount">
+                        0 работ
+                    </span>
+
+                </div>
+
+
+                <div class="row g-3" id="labsList">
+
+                    <div class="col-12 text-center text-muted py-4">
+                        Загрузка...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- Модальное окно отправки лабораторной -->
+
+<div
+    class="modal fade"
+    id="submitLabModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="submitLabTitle">
+                    Отправить работу
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Закрыть"
+                ></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div
+                    class="alert alert-danger d-none"
+                    id="submitLabError"
+                ></div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Файл решения
+                    </label>
+
+                    <input
+                        type="file"
+                        class="form-control"
+                        id="labFile"
+                        required
+                    >
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Комментарий
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        id="labComment"
+                        rows="3"
+                        placeholder="Комментарий к работе"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Отмена
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="submitLabBtn"
+                >
+                    Отправить на проверку
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/app.js' %}"></script>
+<script>
+
+// --- Проверка входа ---
+const currentUser = API.requireRole("student");
+
+let pendingLabId = null;
+const submitLabModal = new bootstrap.Modal(
+    document.getElementById("submitLabModal")
+);
+
+
+// --- Загрузка дашборда ---
+
+async function loadDashboard() {
+
+    try {
+
+        const data = await API.get("/student/dashboard/");
+
+        renderUser(data.student_info);
+        renderStats(data.stats);
+        renderLectures(data.recent_lectures);
+        renderLabs(data.lab_works);
+
+    } catch (err) {
+
+        const body = document.getElementById("lecturesBody");
+        if (body) {
+            body.innerHTML =
+                '<tr><td colspan="4" class="text-center text-danger py-4">' +
+                API.escapeHtml(err.message) +
+                "</td></tr>";
+        }
+
+    }
+
+}
+
+
+function renderUser(info) {
+
+    const name = info.first_name || currentUser.username;
+    const group = info.group_name || "Без группы";
+
+    document.getElementById("userName").textContent = name;
+    document.getElementById("userAvatar").textContent = API.initials(name);
+    document.getElementById("userGroup").textContent = group;
+    document.getElementById("groupBadge").textContent = group;
+    document.getElementById("greeting").textContent = "Добрый день, " + name + " 👋";
+
+}
+
+
+function renderStats(stats) {
+
+    document.getElementById("statLabs").textContent = stats.labs_completed;
+    document.getElementById("statLectures").textContent = stats.lectures_completed;
+    document.getElementById("statPending").textContent = stats.pending_count;
+    document.getElementById("statProgress").textContent = stats.overall_progress;
+
+    const percent = parseInt(stats.overall_progress, 10) || 0;
+
+    document.getElementById("progressPercent").textContent = stats.overall_progress;
+    document.getElementById("progressBar").style.width = percent + "%";
+
+    const doneParts = String(stats.labs_completed).split("/");
+    document.getElementById("progressCompleted").textContent =
+        "Выполнено " + (doneParts[0] || 0) + " из " + (doneParts[1] || 0) + " лабораторных";
+    document.getElementById("progressRemaining").textContent =
+        "Осталось " + stats.remaining_labs;
+
+}
+
+
+let lecturesCache = [];
+
+function renderLectures(lectures) {
+
+    lecturesCache = lectures || [];
+
+    const tbody = document.getElementById("lecturesBody");
+
+    if (!lectures || !lectures.length) {
+
+        tbody.innerHTML =
+            '<tr><td colspan="4" class="text-center text-muted py-4">' +
+            "Лекций пока нет</td></tr>";
+        return;
+
+    }
+
+    tbody.innerHTML = lectures.map(function (lecture) {
+
+        const isRead = lecture.status === "Изучено";
+
+        const badge = isRead
+            ? '<span class="status-badge status-success"><i class="fa-solid fa-check"></i> Изучено</span>'
+            : '<span class="status-badge status-warning"><i class="fa-solid fa-clock"></i> Не изучено</span>';
+
+        // «Изучить» — открывает файл лекции и отмечает её прочитанной
+        const button = isRead
+            ? '<button class="btn btn-sm btn-outline-primary" data-action="open" data-id="' + lecture.id + '">Открыть</button>'
+            : '<button class="btn btn-sm btn-primary" data-action="study" data-id="' + lecture.id + '">Изучить</button>';
+
+        return [
+            "<tr>",
+            "<td>",
+            "<strong>" + API.escapeHtml(lecture.title) + "</strong>",
+            "<br>",
+            '<small class="text-muted">' + API.escapeHtml(lecture.description || "") + "</small>",
+            "</td>",
+            "<td>" + API.formatDate(lecture.created_at) + "</td>",
+            "<td>" + badge + "</td>",
+            '<td class="text-end">' + button + "</td>",
+            "</tr>"
+        ].join("");
+
+    }).join("");
+
+}
+
+
+function renderLabs(labs) {
+
+    const list = document.getElementById("labsList");
+    document.getElementById("labsCount").textContent =
+        (labs ? labs.length : 0) + " работ";
+
+    if (!labs || !labs.length) {
+
+        list.innerHTML =
+            '<div class="col-12 text-center text-muted py-4">Лабораторных работ пока нет</div>';
+        return;
+
+    }
+
+    list.innerHTML = labs.map(function (lab) {
+
+        const status = lab.status || "Не сдано";
+
+        let badge;
+        if (status === "Зачтено") {
+            badge = '<span class="status-badge status-success"><i class="fa-solid fa-check"></i> Зачтено</span>';
+        } else if (status === "На проверке") {
+            badge = '<span class="status-badge status-warning"><i class="fa-solid fa-clock"></i> На проверке</span>';
+        } else if (status === "На доработку") {
+            badge = '<span class="status-badge status-danger"><i class="fa-solid fa-rotate-left"></i> На доработку</span>';
+        } else {
+            badge = '<span class="status-badge status-muted"><i class="fa-solid fa-file-circle-xmark"></i> Не сдано</span>';
+        }
+
+        // Сдать/пересдать можно только ещё не сданную или возвращённую работу
+        const canSubmit = status === "Не сдано" || status === "На доработку";
+        const submitLabel = status === "На доработку" ? "Пересдать" : "Отправить работу";
+
+        const materialsLink = lab.materials
+            ? '<a class="btn btn-sm btn-outline-secondary" href="' +
+              API.escapeHtml(lab.materials) + '" target="_blank">' +
+              '<i class="fa-solid fa-paperclip me-1"></i>Материалы</a>'
+            : "";
+
+        const button = canSubmit
+            ? '<button class="btn btn-sm btn-primary" data-action="submit-lab" data-id="' + lab.id + '">' +
+              '<i class="fa-solid fa-upload me-1"></i>' + submitLabel + "</button>"
+            : "";
+
+        return [
+            '<div class="col-12">',
+            '<div class="border rounded-3 p-3">',
+            '<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">',
+            '<div class="d-flex gap-3 align-items-center">',
+            '<div class="stat-icon"><i class="fa-solid fa-flask"></i></div>',
+            "<div>",
+            "<strong>" + API.escapeHtml(lab.title) + "</strong>",
+            '<div class="small text-muted">' + API.escapeHtml(lab.description || "") + "</div>",
+            "</div>",
+            "</div>",
+            '<div class="d-flex align-items-center gap-2 flex-wrap">',
+            badge,
+            materialsLink,
+            button,
+            "</div>",
+            "</div>",
+            "</div>",
+            "</div>"
+        ].join("");
+
+    }).join("");
+
+}
+
+
+// --- Действия ---
+
+document.addEventListener("click", async function (e) {
+
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const id = btn.dataset.id;
+
+    if (action === "study") {
+
+        // Открываем файл лекции (если есть) и отмечаем изученной
+        const lecture = lecturesCache.find(function (l) {
+            return String(l.id) === String(id);
+        });
+
+        if (lecture && lecture.file) {
+            window.open(lecture.file, "_blank");
+        }
+
+        btn.disabled = true;
+
+        try {
+
+            await API.post("/student/lectures/" + id + "/read/");
+            await loadDashboard();
+
+        } catch (err) {
+
+            alert(err.message);
+            btn.disabled = false;
+
+        }
+
+    } else if (action === "open") {
+
+        const lecture = lecturesCache.find(function (l) {
+            return String(l.id) === String(id);
+        });
+
+        if (lecture && lecture.file) {
+            window.open(lecture.file, "_blank");
+        } else {
+            alert("Файл лекции не прикреплён");
+        }
+
+    } else if (action === "submit-lab") {
+
+        pendingLabId = id;
+        document.getElementById("labFile").value = "";
+        document.getElementById("labComment").value = "";
+
+        const errorBox = document.getElementById("submitLabError");
+        errorBox.classList.add("d-none");
+
+        submitLabModal.show();
+
+    }
+
+});
+
+
+document.getElementById("submitLabBtn").addEventListener("click", async function () {
+
+    const errorBox = document.getElementById("submitLabError");
+    errorBox.classList.add("d-none");
+
+    const fileInput = document.getElementById("labFile");
+
+    if (!fileInput.files.length) {
+
+        errorBox.textContent = "Выберите файл решения";
+        errorBox.classList.remove("d-none");
+        return;
+
+    }
+
+    const formData = new FormData();
+    formData.append("lab_work", pendingLabId);
+    formData.append("submission_file", fileInput.files[0]);
+    formData.append("comment", document.getElementById("labComment").value);
+
+    this.disabled = true;
+
+    try {
+
+        await API.post("/student/labs/submit/", formData);
+
+        submitLabModal.hide();
+        await loadDashboard();
+
+    } catch (err) {
+
+        errorBox.textContent = err.message;
+        errorBox.classList.remove("d-none");
+
+    } finally {
+
+        this.disabled = false;
+
+    }
+
+});
+
+
+loadDashboard();
+
+</script>
+
+</body>
+
+</html>
